@@ -1,4 +1,72 @@
-# Digital-Lock-System
-This repository contains the design and implementation of a hardware-based security system built entirely using 74LS Series TTL Integrated Circuits. Unlike microcontroller-driven projects, this lock utilizes discrete logic to handle encoding, magnitude comparison, and sequential data storage.
+🔐 Digital Lock System Using 74xx ICs
+A hardware-based digital combination lock designed using classic TTL 74xx logic ICs.
+The system accepts decimal input from a keypad, encodes it into BCD, stores each digit, compares it with preset values, and unlocks only when all digits match correctly.
 
-This repository contains the design and implementation of a hardware-based security system built entirely using 74LS Series TTL Integrated Circuits. Unlike microcontroller-driven projects, this lock utilizes discrete logic to handle encoding, magnitude comparison, and sequential data storage.🛠️ System ArchitectureThe project demonstrates a complete digital logic pipeline:Decimal-to-BCD Encoding: A 74LS147 Priority Encoder converts 10-button keypad inputs into 4-bit Binary Coded Decimal (BCD).Data Conditioning: A 74LS04 Hex Inverter standardizes the active-low signals, while an RC network ($10\text{k}\Omega$ resistor + $0.1\mu\text{F}$ capacitor) provides hardware debouncing to eliminate mechanical switch noise.Storage & Comparison: The 74LS195 shift register stores input digits, which the 74LS85 Magnitude Comparator then checks against a hard-wired "secret key".Memory Latching: Successful matches are captured by 74LS74 D-Type Flip-Flops. These latches ensure the "Match" state persists even after the user releases the keypad.⚡ Key Technical FeaturesHardware Debouncing: Strategic use of $0.1\mu\text{F}$ capacitors prevents the "double-clocking" error common in manual pulse circuits.Logic Stability: Pull-down resistors ($10\text{k}\Omega$) prevent floating inputs, and active-low pins ($\overline{CLR}$/$\overline{PRE}$) are tied to VCC to ensure stable operation.Visual Debugging: Integrated 74LS47 Decoder and 7-segment display for real-time BCD verification.📂 Repository ContentsSchematics: Proteus simulation files (.DSN) and PDF logic diagrams.Hardware: High-resolution photos of the multi-digit breadboard assembly.
+This project demonstrates digital logic design, combinational + sequential circuits, and practical hardware interfacing using encoders, decoders, registers, comparators, and flip-flops.
+
+🧠 How the System Works
+
+:) Input Encoding
+----> A numeric keypad is connected to the 74147 Priority Encoder.
+----> Since 74147 outputs active-LOW BCD, a 7404 inverter is used to convert it into true BCD.
+
+:) Display
+----> The BCD output is sent to a 7447 BCD-to-7 Segment Decoder.
+----> The entered digit is shown on a 7-segment display.
+
+:) Data Storage
+----> Each digit is stored using a 74195 Universal Shift Register (parallel load mode).
+----> Separate registers are used for each digit.
+
+:) Comparison
+----> Stored digits (from 74195) are compared with preset values using 7485 4-bit Magnitude Comparators.
+----> The A = B output becomes HIGH when a correct digit is entered.
+
+:) Decision Latching
+----> Each comparator’s output is latched using a 7474 D Flip-Flop.
+----> This prevents glitches and stores the match result.
+
+:) Final Unlock Logic
+----> The three DFF outputs are combined using an AND gate.
+----> The lock opens only when all three digits are correct.
+
+🧩 Components Used
+IC	Description
+----> 74147	Priority Encoder (Decimal to BCD)
+----> 7404	Hex Inverter
+----> 7447	BCD to 7-Segment Decoder
+----> 74195	4-bit Universal Shift Register
+----> 7485	4-bit Magnitude Comparator
+----> 7474	Dual D Flip-Flop
+----> AND Gate	Final unlock logic
+----> 7-Segment Display	Visual output
+----> Keypad	User input
+----> 10kΩ Resistors	Pull-downs for encoder
+----> 1µF Capacitors + Pull-ups	Clock debouncing
+
+🔄 System Flow
+   Keypad → 74147 → 7404 → 7447 → 7-Segment
+                      ↓
+                   74195
+                      ↓
+                    7485
+                      ↓
+                    7474
+                      ↓
+                 AND Gate
+                      ↓
+                    LOCK
+
+🎯 Features
+
+----> Fully hardware-based (no microcontroller)
+----> Noise-free clock using RC debounce
+----> Secure 3-digit comparison
+----> Visual digit feedback
+----> Modular and expandable design
+
+🛠️ Applications
+----> Digital door locks
+----> Security panels
+----> Safe lock systems
+----> Educational digital logic labs
